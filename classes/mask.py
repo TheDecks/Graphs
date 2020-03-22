@@ -1,4 +1,4 @@
-from typing import Set, List, Tuple
+from typing import Set, List, Tuple, Dict
 
 from .bases.graph_like import GraphLike, Node, Edge
 
@@ -25,6 +25,8 @@ class Mask(GraphLike):
         :param skip_edge_labels: container with forbidden labels of edges.
         :return: list of subgraphs that has one more edge than current mask, built into the same universe.
         """
+
+        # TODO: Decide whether to also grow with incoming edges
         out_edges = {
             edge for node in self.nodes for edge in self.universe.edges_from(node) if edge.label not in skip_edge_labels
         }
@@ -40,3 +42,7 @@ class Mask(GraphLike):
             this_mask.add_edge(edge)
             new_masks.append(this_mask)
         return new_masks
+
+    # TODO: Create logic of mapping finding. Exact graph mapping
+    def find_instances_in(self, graph: GraphLike) -> List[Tuple[Dict[Node, Node], Dict[Edge, Edge]]]: ...
+

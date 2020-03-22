@@ -25,3 +25,5 @@ class Universe(GraphLike):
         root_edges = {edge for edge in self.edges if edge.node_to not in self.leaves}
         self.root_graph = Mask(root_nodes, root_edges, self)
 
+    # TODO: Implement random mask creation. From root or from whole universe?
+    def get_random_mask(self, size: int) -> Mask: ...

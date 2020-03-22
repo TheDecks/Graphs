@@ -79,6 +79,7 @@ class Pathway(Universe):
         return nodes, edges
 
     def _parse_entry(self, entry: ElementTree.Element) -> Tuple[Set[Node], Set[Edge]]:
+        # TODO: Look at group entries in pathways
         _id = self.no_nodes
         kegg_id = int(entry.get('id'))
         name = entry.get('name')
