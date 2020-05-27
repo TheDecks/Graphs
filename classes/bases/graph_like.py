@@ -1,8 +1,11 @@
-from typing import Set
+from typing import Set, Optional
 
 from ..edge import Edge
 from ..node import Node
+from ..walk import Walk
 from ..exceptions import NodeNotInGraphError
+
+import random
 
 
 class GraphLike:
@@ -93,3 +96,33 @@ class GraphLike:
         :return: set of edges in graph.
         """
         return {g_edge for g_edge in self.edges if g_edge == edge}
+
+    def generate_random_walk(self,
+                             max_length: int,
+                             from_vertex: Optional[Node] = None,
+                             # no_look_back_param: float = 1,
+                             close_proximity_param: float = 1
+                             ):
+        if from_vertex is None:
+            from_vertex = random.sample(self.nodes, 1)[0]
+        edges = []
+        previous_vertex = None
+        current_vertex = from_vertex
+        for _ in range(max_length):
+            next_edges = []
+            weights = []
+            for edge in self.edges_from(current_vertex):
+                vertex = edge.node_to
+                next_edges.append(edge)
+                if (previous_vertex is not None
+                        and previous_vertex.id in [edge.node_to.id for edge in self.edges_from(vertex)]):
+                    weights.append(1)
+                else:
+                    weights.append(1/close_proximity_param)
+            if not next_edges:
+                break
+            next_edge = random.choices(next_edges, weights=weights)[0]
+            previous_vertex = current_vertex
+            current_vertex = next_edge.node_to
+            edges.append(next_edge)
+        return Walk(edges)
