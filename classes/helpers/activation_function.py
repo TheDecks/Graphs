@@ -28,10 +28,21 @@ linear = ActivateFunction(
     function=lambda x: x,
     derivative=lambda x: np.ones(x.shape)
 )
+softmax = ActivateFunction(
+    function=lambda x: np.where(
+        np.isnan(np.exp(x) / np.sum(np.exp(x), axis=1)[:, np.newaxis]),
+        0, np.exp(x) / np.sum(np.exp(x), axis=1)[:, np.newaxis]
+    ),
+    derivative=lambda x: np.where(
+        np.isnan(np.exp(x) / np.sum(np.exp(x), axis=1)[:, np.newaxis]),
+        0, np.exp(x) / np.sum(np.exp(x), axis=1)[:, np.newaxis]
+    ) - 1 / np.exp(x)
+)
 
 act_funs = {
     'sigmoid': sigmoid,
     'relu': relu,
     'tanh': tanh,
-    'linear': linear
+    'linear': linear,
+    'softmax': softmax
 }  # type: Dict[str, ActivateFunction]

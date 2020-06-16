@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Set, Tuple
 
 from classes.bases.graph_like import GraphLike
 from .bases.node_like import NodeLike
@@ -34,12 +34,12 @@ class NodeFeatureExtractor:
             nbhd_labelling_from = [
                 self.labelling[edge.node_to]
                 for edge in self.graph.edges_from(node)
-                if self.labelling[edge.node_to] is not None
+                if edge.node_to in self.labelling and self.labelling[edge.node_to] is not None
             ]
             nbhd_labelling_to = [
                 self.labelling[edge.node_from]
                 for edge in self.graph.edges_to(node)
-                if self.labelling[edge.node_from] is not None
+                if edge.node_from in self.labelling and self.labelling[edge.node_from] is not None
             ]
             self.current_neighbourhood_stats_from[node] = NodeFeatureExtractor._aggregate_list(nbhd_labelling_from)
             self.current_neighbourhood_stats_to[node] = NodeFeatureExtractor._aggregate_list(nbhd_labelling_to)
@@ -63,6 +63,20 @@ class NodeFeatureExtractor:
                 ] else 0,
                 axis=1
             )
+
+    def get_representation_labels(self, nodes: Set[NodeLike]) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        ids = {node.id for node in nodes}
+        return (self.representation[self.representation["NodeId"].isin(ids)],
+                self.representation[self.representation["NodeId"].isin(ids)]["NodeId"].apply(
+                    lambda _id: self.labelling[self.id_to_node_mapping[_id]]
+                    if self.id_to_node_mapping[_id] in self.labelling
+                    else None
+                ))
+
+    def update_labelling(self, nodes_ids: List[int], labels: List[str]):
+        self.labelling.update({
+            self.id_to_node_mapping[_id]: label for _id, label in zip(nodes_ids, labels)
+        })
 
     @staticmethod
     def _aggregate_list(to_aggregate: List[str]) -> Dict[str, int]:

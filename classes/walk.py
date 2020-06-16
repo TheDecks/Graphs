@@ -48,7 +48,8 @@ class Walk:
         return [self.edges[0].node_from] + [edge.node_to for edge in self.edges] if self.edges else []
 
     def __contains__(self, item: Union[Edge, NodeLike]):
-        return item in self.edges if isinstance(item, Edge) else item in self.vertices
+        return item.hash in [edge.hash for edge in self.edges] if isinstance(item, Edge) \
+            else item.id in [vertex.id for vertex in self.vertices]
 
     def __len__(self):
         return len(self.edges)

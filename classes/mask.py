@@ -26,9 +26,10 @@ class Mask(GraphLike):
         :return: list of subgraphs that has one more edge than current mask, built into the same universe.
         """
 
-        # TODO: Decide whether to also grow with incoming edges
         out_edges = {
-            edge for node in self.nodes for edge in self.universe.edges_from(node) if edge.label not in skip_edge_labels
+            edge for node in self.nodes
+            for edge in self.universe.edges_from(node).union(self.universe.edges_to(node))
+            if edge.label not in skip_edge_labels
         }
         # out_edges = {edge for node in self.nodes
         #              for edge in self.universe.edges_from(node) | self.universe.edges_to(node)
@@ -39,6 +40,8 @@ class Mask(GraphLike):
             this_mask = Mask(self.nodes, self.edges, self.universe)
             if edge.node_to not in this_mask.nodes:
                 this_mask.add_node(edge.node_to)
+            if edge.node_from not in this_mask.nodes:
+                this_mask.add_node(edge.node_from)
             this_mask.add_edge(edge)
             new_masks.append(this_mask)
         return new_masks

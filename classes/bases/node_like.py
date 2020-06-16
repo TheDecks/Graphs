@@ -23,4 +23,4 @@ class NodeLike:
 
     def __eq__(self, other: 'NodeLike'):
         """Nodes are compared by their value."""
-        return self.value == other.value
+        return self.id == other.id

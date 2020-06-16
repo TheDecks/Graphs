@@ -87,7 +87,7 @@ class GraphLike:
         :param node: reference node.
         :return: set of nodes in graph.
         """
-        return {g_node for g_node in self.nodes if g_node == node}
+        return {g_node for g_node in self.nodes if g_node.value == node.value}
 
     def find_similar_edges(self, edge: Edge) -> Set[Edge]:
         """Get edges of same type as input edge. Input edge needs not to be in graph.
@@ -96,6 +96,11 @@ class GraphLike:
         :return: set of edges in graph.
         """
         return {g_edge for g_edge in self.edges if g_edge == edge}
+
+    def get_node_by_id(self, idx: int):
+        for node in self.nodes:
+            if node.id == idx:
+                return node
 
     def generate_random_walk(self,
                              max_length: int,

@@ -9,8 +9,8 @@ hsa00010_pathway = Pathway.from_url("http://rest.kegg.jp/get/hsa00010/kgml")
 
 # show information about nodes and edges in pathway
 root = hsa00010_pathway.root_graph
-for node in root.nodes:
-    edges_from = root.edges_from(node)
+for node in hsa00010_pathway.nodes:
+    edges_from = hsa00010_pathway.edges_from(node)
     if edges_from:
         print(node)
         print('\n\t'.join(str(edge) for edge in edges_from))

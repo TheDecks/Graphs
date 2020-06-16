@@ -20,7 +20,7 @@ class GraphVectorizer:
                               target_feature_number: Optional[int] = None,
                               learning_rate: float = 0.1,
                               hidden_layer_activation_function: ActivateFunction = linear,
-                              output_layer_activation_function: ActivateFunction = sigmoid,
+                              output_layer_activation_function: ActivateFunction = softmax,
                               cost_function: CostFunction = mse
                               ):
         target_feature_number = target_feature_number if target_feature_number else int(0.1 * self.N)
@@ -37,13 +37,15 @@ class GraphVectorizer:
                        no_walks: Optional[int] = None,
                        max_walk_length: Optional[int] = None,
                        window_weights: tuple = (1 / 2, 1, 0, 1, 1 / 2),
-                       close_proximity_parameter: float = 1
+                       close_proximity_parameter: float = 1,
+                       single_learn_repetition: int = 1
                        ):
         no_walks = no_walks if no_walks else 4 * self.N
         max_walk_length = max_walk_length if max_walk_length else int(self.N ** (1 / 2))
         context = self._generate_context(no_walks, max_walk_length, window_weights, close_proximity_parameter)
         for node_in, node_out, out_value in context:
-            self._single_sample_adjust(node_in, node_out, out_value)
+            for _ in range(single_learn_repetition):
+                self._single_sample_adjust(node_in, node_out, out_value)
 
     def _generate_context(self,
                           no_walks: int,
