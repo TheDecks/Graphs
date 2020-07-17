@@ -127,3 +127,8 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+
+node_classification_methods/*
+node_results/*
+gc_methods/*
