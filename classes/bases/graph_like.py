@@ -97,7 +97,12 @@ class GraphLike:
         """
         return {g_edge for g_edge in self.edges if g_edge == edge}
 
-    def get_node_by_id(self, idx: int):
+    def get_node_by_id(self, idx: int) -> Node:
+        """Search for node object referencing its id.
+
+        :param idx: id of the node.
+        :return: Node object.
+        """
         for node in self.nodes:
             if node.id == idx:
                 return node
@@ -105,9 +110,17 @@ class GraphLike:
     def generate_random_walk(self,
                              max_length: int,
                              from_vertex: Optional[Node] = None,
-                             # no_look_back_param: float = 1,
                              close_proximity_param: float = 1
-                             ):
+                             ) -> Walk:
+        """Generate a single realisation of random walk. Creation terminates when max_length of edges are gathered or
+        when there is no edge going out of vertex that is currently an end node of walk.
+
+        :param max_length: desired maximal length of a walk.
+        :param from_vertex: starting vertex. If not provided random one is chosen.
+        :param close_proximity_param: controls the walk behaviour. Selecting p >> 1 emulates breadth-first search.
+            Choosing p in (0,1) promotes depth-first search like behaviour.
+        :return: Walk object, that is an ordered collection of traversed edges.
+        """
         if from_vertex is None:
             from_vertex = random.sample(self.nodes, 1)[0]
         edges = []

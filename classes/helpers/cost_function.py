@@ -3,15 +3,25 @@ import numpy as np
 
 
 class CostFunction:
+    """Generic class for cost functions in neural networks."""
 
     def __init__(self,
                  function: Callable[[np.ndarray, np.ndarray], np.ndarray],
                  derivative: Callable[[np.ndarray, np.ndarray], np.ndarray]
                  ):
+        """The implementation is used for backpropagation method of adjusting neural networks, hence the interface of a
+        function needs to specify the function and its derivative.
+
+        :param function: Callable object that calculates the value of function.
+        :param derivative: Callable object that calculates the value of derivative.
+        """
+
         self.function = function
         self.derivative = derivative
 
     def __call__(self, _y: np.ndarray, target: np.ndarray):
+        """For convenience, so that an instance can be directly called, omitting the referencing of function
+        attribute."""
         return self.function(_y, target)
 
 

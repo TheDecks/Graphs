@@ -31,9 +31,6 @@ class Mask(GraphLike):
             for edge in self.universe.edges_from(node).union(self.universe.edges_to(node))
             if edge.label not in skip_edge_labels
         }
-        # out_edges = {edge for node in self.nodes
-        #              for edge in self.universe.edges_from(node) | self.universe.edges_to(node)
-        #              if edge.label not in skip_edge_labels}
         possible_grows = out_edges - self.edges
         new_masks = []
         for edge in possible_grows:
@@ -46,6 +43,7 @@ class Mask(GraphLike):
             new_masks.append(this_mask)
         return new_masks
 
+    # Actually proven not needed in thesis, still might come to this later.
     # TODO: Create logic of mapping finding. Exact graph mapping
     def find_instances_in(self, graph: GraphLike) -> List[Tuple[Dict[Node, Node], Dict[Edge, Edge]]]: ...
 

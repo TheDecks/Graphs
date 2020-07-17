@@ -7,8 +7,12 @@ from classes.helpers.neural_network import *
 # Create Pathway object as graph
 hsa00010_pathway = Pathway.from_url("http://rest.kegg.jp/get/hsa00010/kgml")
 
+hsa00010_pathway.re_root(["name"])
+
 # show information about nodes and edges in pathway
 root = hsa00010_pathway.root_graph
+
+print(len(root.nodes), len(root.edges))
 for node in hsa00010_pathway.nodes:
     edges_from = hsa00010_pathway.edges_from(node)
     if edges_from:

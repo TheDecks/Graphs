@@ -50,8 +50,8 @@ class RWKernel:
     def set_up_neural_network(self,
                               target_feature_number: Optional[int] = None,
                               learning_rate: float = 0.00001,
-                              hidden_layer_activation_function: ActivateFunction = tanh,
-                              output_layer_activation_function: ActivateFunction = softmax,
+                              hidden_layer_activation_function: ActivationFunction = tanh,
+                              output_layer_activation_function: ActivationFunction = softmax,
                               cost_function: CostFunction = mse
                               ):
         N = len(self.triplets)
